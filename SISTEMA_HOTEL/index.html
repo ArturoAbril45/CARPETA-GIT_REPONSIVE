@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Interactivo - Control Hotel</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/hotel_dashboard.css">
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo-section">
+            <i class="bi bi-building" style="font-size: 40px;"></i>
+            <h4>CONTROL HOTEL OPS</h4>
+        </div>
+        
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" onclick="showSection('dashboard')">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('habitaciones')">
+                    <i class="bi bi-door-closed"></i>
+                    <span>Habitaciones</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('reservas')">
+                    <i class="bi bi-calendar-check"></i>
+                    <span>Reservas</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('limpieza')">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>Registro Limpieza</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('personal')">
+                    <i class="bi bi-people"></i>
+                    <span>Personal</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('insumos')">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Insumos</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('reportes')">
+                    <i class="bi bi-graph-up"></i>
+                    <span>Reportes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('configuracion')">
+                    <i class="bi bi-gear"></i>
+                    <span>Configuración</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid">
+                <h5 class="mb-0" id="pageTitle">Control de Limpieza - Dashboard</h5>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-primary btn-sm" onclick="showSection('limpieza')">
+                        <i class="bi bi-plus-circle"></i> Nuevo Registro
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar bg-primary text-white">
+                            WG
+                        </div>
+                        <div class="d-none d-md-block">
+                            <small class="d-block fw-bold">Wilson Gallardo</small>
+                            <small class="text-muted" style="font-size: 11px;">Supervisor</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- SECCIÓN: DASHBOARD -->
+        <div id="dashboard" class="section-content active">
+            <!-- FILTROS -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Fecha</label>
+                                    <input type="date" class="form-control" value="2024-12-19">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Turno</label>
+                                    <select class="form-select">
+                                        <option>Todos</option>
+                                        <option>Mañana</option>
+                                        <option>Tarde</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Estado</label>
+                                    <select class="form-select">
+                                        <option>Todos</option>
+                                        <option>Completado</option>
+                                        <option>Pendiente</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">&nbsp;</label>
+                                    <button class="btn btn-primary w-100">
+                                        <i class="bi bi-search"></i> Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESTADÍSTICAS -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="text-muted mb-1 small">Habitaciones Limpiadas</p>
+                                    <h3 class="mb-0 fw-bold">42</h3>
+                                    <small class="text-success"><i class="bi bi-arrow-up"></i> +12% vs ayer</small>
+                                </div>
+                                <div class="stat-icon" style="background-color: rgba(76, 175, 80, 0.1); color: #4caf50;">
+                                    <i class="bi bi-door-open"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="text-muted mb-1 small">Tiempo Promedio</p>
+                                    <h3 class="mb-0 fw-bold">28min</h3>
+                                    <small class="text-info"><i class="bi bi-dash"></i> Estable</small>
+                                </div>
+                                <div class="stat-icon" style="background-color: rgba(33, 150, 243, 0.1); color: #2196f3;">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="text-muted mb-1 small">Personal Activo</p>
+                                    <h3 class="mb-0 fw-bold">8</h3>
+                                    <small class="text-muted"><i class="bi bi-people"></i> En turno</small>
+                                </div>
+                                <div class="stat-icon" style="background-color: rgba(103, 58, 183, 0.1); color: #673ab7;">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="text-muted mb-1 small">Insumos Bajos</p>
+                                    <h3 class="mb-0 fw-bold">3</h3>
+                                    <small class="text-danger"><i class="bi bi-exclamation-triangle"></i> Requieren atención</small>
+                                </div>
+                                <div class="stat-icon" style="background-color: rgba(244, 67, 54, 0.1); color: #f44336;">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRÁFICOS -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-3">Habitaciones Limpiadas por Día (Última Semana)</h6>
+                            <canvas id="chartLimpieza" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-3">Estado de Habitaciones</h6>
+                            <canvas id="chartEstado" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: HABITACIONES -->
+        <div id="habitaciones" class="section-content">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="fw-bold">Gestión de Habitaciones</h4>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-success btn-sm" onclick="filterRooms('disponible')">
+                                <i class="bi bi-check-circle"></i> Disponibles
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="filterRooms('ocupada')">
+                                <i class="bi bi-person-fill"></i> Ocupadas
+                            </button>
+                            <button class="btn btn-outline-warning btn-sm" onclick="filterRooms('limpieza')">
+                                <i class="bi bi-tools"></i> En Limpieza
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="filterRooms('all')">
+                                <i class="bi bi-list"></i> Todas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3" id="roomsContainer">
+                <!-- Las habitaciones se generan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- SECCIÓN: RESERVAS -->
+        <div id="reservas" class="section-content">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4 class="fw-bold mb-3">Sistema de Reservas</h4>
+                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevaReserva">
+                        <i class="bi bi-plus-circle"></i> Nueva Reserva
+                    </button>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle" id="reservasTable">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Habitación</th>
+                                    <th>Cliente</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Reservas dinámicas -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: LIMPIEZA -->
+        <div id="limpieza" class="section-content">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-4">Nuevo Registro de Limpieza</h5>
+                            <form id="formLimpieza">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Fecha</label>
+                                        <input type="date" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Turno</label>
+                                        <select class="form-select" required>
+                                            <option value="">Seleccionar...</option>
+                                            <option>Mañana</option>
+                                            <option>Tarde</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold">Responsable</label>
+                                        <input type="text" class="form-control" placeholder="Nombre completo" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Habitación</label>
+                                        <select class="form-select" id="selectHabitacion" required>
+                                            <option value="">Seleccionar...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Tipo de Limpieza</label>
+                                        <select class="form-select" required>
+                                            <option value="">Seleccionar...</option>
+                                            <option>Normal</option>
+                                            <option>Profunda</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Hora Inicio</label>
+                                        <input type="time" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Hora Fin</label>
+                                        <input type="time" class="form-control">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">Observaciones</label>
+                                        <textarea class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-save"></i> Guardar Registro
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: INSUMOS -->
+        <div id="insumos" class="section-content">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="fw-bold">Gestión de Insumos por Habitación</h4>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSolicitarInsumos">
+                            <i class="bi bi-cart-plus"></i> Solicitar Insumos
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0"><i class="bi bi-door-closed"></i> Seleccionar Habitación</h6>
+                        </div>
+                        <div class="list-group list-group-flush" id="roomListInsumos">
+                            <!-- Habitaciones para seleccionar -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h6 class="mb-0"><i class="bi bi-box-seam"></i> Insumos de la Habitación</h6>
+                        </div>
+                        <div class="card-body" id="insumosDetail">
+                            <p class="text-muted text-center py-5">Selecciona una habitación para ver sus insumos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: PERSONAL -->
+        <div id="personal" class="section-content">
+            <h4 class="fw-bold mb-4">Gestión de Personal</h4>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="user-avatar bg-warning text-white mx-auto mb-3" style="width: 80px; height: 80px; font-size: 32px;">
+                                AM
+                            </div>
+                            <h5 class="fw-bold">Ana Martínez</h5>
+                            <p class="text-muted small">Jefa de Limpieza</p>
+                            <div class="d-flex justify-content-around mb-3">
+                                <div>
+                                    <strong>156</strong>
+                                    <p class="small text-muted mb-0">Habitaciones</p>
+                                </div>
+                                <div>
+                                    <strong>98.5%</strong>
+                                    <p class="small text-muted mb-0">Calidad</p>
+                                </div>
+                            </div>
+                            <span class="badge bg-success">Activo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="user-avatar bg-info text-white mx-auto mb-3" style="width: 80px; height: 80px; font-size: 32px;">
+                                CR
+                            </div>
+                            <h5 class="fw-bold">Carlos Ruiz</h5>
+                            <p class="text-muted small">Personal de Limpieza</p>
+                            <div class="d-flex justify-content-around mb-3">
+                                <div>
+                                    <strong>142</strong>
+                                    <p class="small text-muted mb-0">Habitaciones</p>
+                                </div>
+                                <div>
+                                    <strong>97.2%</strong>
+                                    <p class="small text-muted mb-0">Calidad</p>
+                                </div>
+                            </div>
+                            <span class="badge bg-success">Activo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="user-avatar bg-danger text-white mx-auto mb-3" style="width: 80px; height: 80px; font-size: 32px;">
+                                LP
+                            </div>
+                            <h5 class="fw-bold">Laura Pérez</h5>
+                            <p class="text-muted small">Personal de Limpieza</p>
+                            <div class="d-flex justify-content-around mb-3">
+                                <div>
+                                    <strong>138</strong>
+                                    <p class="small text-muted mb-0">Habitaciones</p>
+                                </div>
+                                <div>
+                                    <strong>96.8%</strong>
+                                    <p class="small text-muted mb-0">Calidad</p>
+                                </div>
+                            </div>
+                            <span class="badge bg-warning text-dark">Descanso</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: REPORTES -->
+        <div id="reportes" class="section-content">
+            <h4 class="fw-bold mb-4">Reportes y Estadísticas</h4>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-3">Generar Reporte</h6>
+                            <select class="form-select mb-3">
+                                <option>Reporte Diario</option>
+                                <option>Reporte Semanal</option>
+                                <option>Reporte Mensual</option>
+                                <option>Reporte de Insumos</option>
+                                <option>Reporte de Personal</option>
+                            </select>
+                            <button class="btn btn-primary w-100">
+                                <i class="bi bi-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: CONFIGURACIÓN -->
+        <div id="configuracion" class="section-content">
+            <h4 class="fw-bold mb-4">Configuración del Sistema</h4>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Configuración General</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Hotel</label>
+                        <input type="text" class="form-control" value="Hotel Paradise">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Total de Habitaciones</label>
+                        <input type="number" class="form-control" value="52">
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL: NUEVA RESERVA -->
+    <div class="modal fade" id="modalNuevaReserva" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-calendar-plus"></i> Nueva Reserva</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formReserva">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Habitación</label>
+                            <select class="form-select" id="reservaHabitacion" required>
+                                <option value="">Seleccionar...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre del Cliente</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Teléfono</label>
+                            <input type="tel" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Check-in</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Check-out</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Número de Huéspedes</label>
+                            <input type="number" class="form-control" min="1" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarReserva()">
+                        <i class="bi bi-save"></i> Guardar Reserva
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SOLICITAR INSUMOS -->
+    <div class="modal fade" id="modalSolicitarInsumos" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-cart-plus"></i> Solicitar Insumos</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Habitación</label>
+                            <select class="form-select" required>
+                                <option value="">Seleccionar...</option>
+                                <option>H1 - Matrimonial</option>
+                                <option>H2 - Matrimonial</option>
+                                <option>H3 - Matrimonial</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Insumo</label>
+                            <select class="form-select" required>
+                                <option value="">Seleccionar...</option>
+                                <option>Jabón</option>
+                                <option>Papel Higiénico</option>
+                                <option>Toallas</option>
+                                <option>Sábanas</option>
+                                <option>Detergente</option>
+                                <option>Desinfectante</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Cantidad</label>
+                            <input type="number" class="form-control" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Prioridad</label>
+                            <select class="form-select" required>
+                                <option>Normal</option>
+                                <option>Urgente</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="solicitarInsumos()">
+                        <i class="bi bi-send"></i> Enviar Solicitud
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DETALLE DE HABITACIÓN -->
+    <div class="modal fade" id="modalDetalleHabitacion" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="modalRoomTitle">Detalles de la Habitación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalRoomBody">
+                    <!-- Contenido dinámico -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="js/hotel_dashboard.js"></script>
+
+</body>
+</html>

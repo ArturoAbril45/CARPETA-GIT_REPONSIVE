@@ -1,0 +1,117 @@
+/* Project by Arturo Abril - Responsive styles for VISIT Real Estate Landing Page
+VISIT - Real Estate Landing Page
+Arturo Abril - Junior Web Developer
+Portfolio: https://arturoabril.github.io/Portfolio/
+GitHub:
+*/
+
+@media (max-width: 1024px) {
+    .hero-container,
+    .featured-grid,
+    .about-grid,
+    .properties-grid,
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .hero-image {
+        order: -1;
+    }
+
+    .hero-title {
+        font-size: 42px;
+    }
+
+    .section-title {
+        font-size: 36px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar .container {
+        height: 64px;
+    }
+
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 64px;
+        flex-direction: column;
+        background: var(--bg-white);
+        width: 100%;
+        padding: 24px 0;
+        border-bottom: 1px solid var(--border);
+        transition: left 0.3s ease;
+        gap: 24px;
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    .hero {
+        padding: 100px 0 60px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-image img {
+        height: 400px;
+    }
+
+    .hero-stats {
+        position: static;
+        margin-top: 24px;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .featured-image-container,
+    .about-image img {
+        height: 320px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-form-container {
+        padding: 32px 24px;
+    }
+
+    .modal-content {
+        margin: 40px 16px;
+        padding: 32px 24px;
+    }
+}

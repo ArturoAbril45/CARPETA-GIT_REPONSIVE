@@ -1,0 +1,361 @@
+/* Variables CSS */
+:root {
+    --primary-color: #16128c;
+    --secondary-color: #217cd2;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --info-color: #2196f3;
+}
+
+/* Estilos Generales */
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    padding: 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.8);
+    padding: 15px 25px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    color: white;
+    background-color: rgba(255,255,255,0.1);
+    border-left-color: white;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+    width: 20px;
+}
+
+.logo-section {
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    margin-bottom: 20px;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+/* Navbar */
+.navbar-custom {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    padding: 15px 30px;
+    margin-bottom: 30px;
+}
+
+/* User Profile */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Stat Cards */
+.stat-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* Secciones */
+.section-content {
+    display: none;
+}
+
+.section-content.active {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Room Cards */
+.room-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background: white;
+}
+
+.room-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(103, 58, 183, 0.2);
+}
+
+.room-card.disponible {
+    border-left: 4px solid var(--success-color);
+}
+
+.room-card.ocupada {
+    border-left: 4px solid var(--danger-color);
+}
+
+.room-card.limpieza {
+    border-left: 4px solid var(--warning-color);
+}
+
+/* Supply Items */
+.supply-item {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.supply-meter {
+    width: 100px;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.supply-meter-fill {
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.supply-meter-fill.high {
+    background: var(--success-color);
+}
+
+.supply-meter-fill.medium {
+    background: var(--warning-color);
+}
+
+.supply-meter-fill.low {
+    background: var(--danger-color);
+}
+
+/* Modal */
+.modal-custom {
+    backdrop-filter: blur(5px);
+}
+
+/* Tables */
+.table thead {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 70px;
+    }
+    
+    .logo-section h4 {
+        font-size: 14px;
+    }
+}
+
+/* Scrollbar personalizada para sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.5);
+}
+
+/* Cards generales */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Botones personalizados */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Badges */
+.badge-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* List group personalizado */
+.list-group-item-action:hover {
+    background-color: rgba(103, 58, 183, 0.05);
+}
+
+/* Form controls */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(103, 58, 183, 0.25);
+}
+
+/* Transiciones suaves */
+* {
+    transition: all 0.2s ease-in-out;
+}
+
+button,
+a {
+    transition: all 0.3s ease;
+}
+
+/* Sombras para elementos elevados */
+.shadow-custom {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+                0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Efectos hover para cards */
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para gráficos */
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Spinner de carga */
+.spinner-custom {
+    border: 3px solid rgba(103, 58, 183, 0.1);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Toast notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+/* Utilidades */
+.text-primary-custom {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary-custom {
+    background-color: var(--primary-color) !important;
+}
+
+.border-primary-custom {
+    border-color: var(--primary-color) !important;
+}
+
+/* Print styles */
+@media print {
+    .sidebar,
+    .navbar-custom,
+    .btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 0;
+    }
+}

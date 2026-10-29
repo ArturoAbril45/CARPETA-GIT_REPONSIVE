@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Localización Avanzado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #00ff41;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, #00ff41 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header mejorado */
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #00ff41;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 3em;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text h1 {
+            font-size: 1.8em;
+            text-shadow: 0 0 20px #00ff41;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .logo-text p {
+            font-size: 0.8em;
+            color: #00cc33;
+            margin-top: 5px;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #00ff41; }
+            50% { text-shadow: 0 0 25px #00ff41, 0 0 40px #00ff41; }
+        }
+
+        .system-time {
+            text-align: right;
+        }
+
+        .system-time .time {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00ff41;
+        }
+
+        .system-time .date {
+            font-size: 0.9em;
+            color: #00cc33;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Grid layout mejorado */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* Cards mejoradas */
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 255, 65, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 255, 65, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .card-icon {
+            font-size: 1.5em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 65, 0.3);
+            color: #00ff41;
+            border: 1px solid #00ff41;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Estadísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: rgba(0, 255, 65, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #00ff41;
+        }
+
+        .stat-label {
+            color: #00cc33;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #00ff41;
+        }
+
+        /* Barra de progreso */
+        .progress-container {
+            margin: 15px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(0, 255, 65, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff41, #00cc33);
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Terminal de código mejorada */
+        .terminal {
+            background: #000;
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 255, 65, 0.3);
+        }
+
+        .terminal-header {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #00ff41;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn-red { background: #ff5f56; }
+        .btn-yellow { background: #ffbd2e; }
+        .btn-green { background: #27c93f; }
+
+        .terminal-title {
+            margin-left: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            height: 350px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .terminal-body::-webkit-scrollbar-track {
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            border-radius: 5px;
+        }
+
+        .code-line {
+            margin: 8px 0;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .timestamp {
+            color: #00cc33;
+            margin-right: 10px;
+        }
+
+        .success { color: #00ff41; }
+        .warning { color: #ffbd2e; }
+        .error { color: #ff5f56; }
+        .info { color: #5ec8ff; }
+
+        /* Mapa mejorado */
+        .map-section {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 255, 65, 0.3);
+        }
+
+        .map-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .map-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px #00ff41;
+        }
+
+        .coordinates {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .coordinate-item {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid #00ff41;
+            text-align: center;
+        }
+
+        .coordinate-label {
+            color: #00cc33;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .coordinate-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .map-wrapper {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.2);
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        /* Radar effect */
+        .radar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 65, 0.3), transparent 70%);
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .radar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 50%;
+            background: #00ff41;
+            transform-origin: top center;
+            animation: radarScan 2s linear infinite;
+        }
+
+        @keyframes radarScan {
+            from { transform: translate(-50%, 0) rotate(0deg); }
+            to { transform: translate(-50%, 0) rotate(360deg); }
+        }
+
+        .radar-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 50%;
+            animation: radarPulse 2s ease-out infinite;
+        }
+
+        .ring-1 { width: 40%; height: 40%; }
+        .ring-2 { width: 70%; height: 70%; animation-delay: 0.5s; }
+        .ring-3 { width: 100%; height: 100%; animation-delay: 1s; }
+
+        @keyframes radarPulse {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Signal strength indicator */
+        .signal-bars {
+            display: flex;
+            gap: 5px;
+            align-items: flex-end;
+            height: 30px;
+        }
+
+        .signal-bar {
+            width: 8px;
+            background: #00ff41;
+            border-radius: 2px;
+            animation: signalAnimation 1.5s ease-in-out infinite;
+        }
+
+        .signal-bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+        .signal-bar:nth-child(2) { height: 50%; animation-delay: 0.2s; }
+        .signal-bar:nth-child(3) { height: 70%; animation-delay: 0.4s; }
+        .signal-bar:nth-child(4) { height: 90%; animation-delay: 0.6s; }
+        .signal-bar:nth-child(5) { height: 100%; animation-delay: 0.8s; }
+
+        @keyframes signalAnimation {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .coordinates {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            iframe {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🛰️</div>
+                <div class="logo-text">
+                    <h1>SISTEMA DE RASTREO AVANZADO</h1>
+                    <p>Tecnología de Localización GPS • Versión 4.2.1</p>
+                </div>
+            </div>
+            <div class="system-time">
+                <div class="time" id="currentTime">00:00:00</div>
+                <div class="date" id="currentDate">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard Cards -->
+        <div class="dashboard">
+            <!-- Card: Celular -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-icon">📱</span>
+                        CELULAR: 0983361280
+                    </div>
+                    <div class="status-badge" style="background: rgba(255, 95, 86, 0.3); color: #ff5f56; border: 1px solid #ff5f56;">● INACTIVO</div>
+                </div>
+                <div class="radar">
+                    <div class="radar-ring ring-1"></div>
+                    <div class="radar-ring ring-2"></div>
+                    <div class="radar-ring ring-3"></div>
+                </div>
+                <div class="stat-item" style="grid-column: 1 / -1; background: rgba(0, 255, 65, 0.15); border: 2px solid #00ff41; margin-bottom: 15px;">
+                    <div style="width: 100%;">
+                        <div class="stat-label">📞 NÚMERO RASTREADO</div>
+                        <div class="stat-value" style="font-size: 1.8em; letter-spacing: 2px;">0983361280</div>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Estado GPS</div>
+                        <div class="stat-value" style="color: #ff5f56;">DESCONECTADO</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Precisión</div>
+                        <div class="stat-value">±5m</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Satélites</div>
+                        <div class="stat-value">12/12</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Señal</div>
+                        <div class="stat-value">
+                            <div class="signal-bars">
+                                <div class="signal-bar"></div>
+                                <div class="signal-bar"></div>
+                                <div class="signal-bar"></div>
+                                <div class="signal-bar"></div>
+                                <div class="signal-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Triangulación</span>
+                        <span>98%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 98%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Facebook -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-icon">📘</span>
+                        FACEBOOK
+                    </div>
+                    <div class="status-badge status-active">● RASTREADO</div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Estado de Sesión</div>
+                        <div class="stat-value">ACTIVA</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">IP Detectada</div>
+                        <div class="stat-value">181.39.x.x</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">ISP</div>
+                        <div class="stat-value">CNT EC</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Dispositivo</div>
+                        <div class="stat-value">Android</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Análisis de Metadatos</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Extracción de Ubicación</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Torres Celulares -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-icon">📡</span>
+                        TORRES CELULARES
+                    </div>
+                    <div class="status-badge status-active">● 3 TORRES</div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Torre 1 - MIL-001</div>
+                        <div class="stat-value">89%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Torre 2 - MIL-002</div>
+                        <div class="stat-value">82%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Torre 3 - MIL-003</div>
+                        <div class="stat-value">76%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Red</div>
+                        <div class="stat-value">4G LTE</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Triangulación Completada</span>
+                        <span>100%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal -->
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-button btn-red"></div>
+                <div class="terminal-button btn-yellow"></div>
+                <div class="terminal-button btn-green"></div>
+                <div class="terminal-title">system@tracker:~$ monitoring</div>
+            </div>
+            <div class="terminal-body" id="terminal"></div>
+        </div>
+
+        <!-- Mapa -->
+        <div class="map-section">
+            <div class="map-header">
+                <h2>🌍 ÚLTIMA UBICACIÓN CONOCIDA</h2>
+                <p style="color: #ffbd2e; margin-top: 10px;">⚠️ Dispositivo inactivo - Mostrando última posición registrada</p>
+            </div>
+
+            <div class="coordinates">
+                <div class="coordinate-item">
+                    <div class="coordinate-label">📍 DIRECCIÓN</div>
+                    <div class="coordinate-value">410 Ave Rio Napo</div>
+                </div>
+                <div class="coordinate-item">
+                    <div class="coordinate-label">🗺️ CIUDAD</div>
+                    <div class="coordinate-value">Milagro, Guayas</div>
+                </div>
+                <div class="coordinate-item">
+                    <div class="coordinate-label">🌐 LATITUD</div>
+                    <div class="coordinate-value">-2.135968</div>
+                </div>
+                <div class="coordinate-item">
+                    <div class="coordinate-label">🌐 LONGITUD</div>
+                    <div class="coordinate-value">-79.603271</div>
+                </div>
+            </div>
+
+            <div class="map-wrapper">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.7047398886823!2d-79.6058459!3d-2.1359679999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x902d47a70de87929%3A0x929b9b3cc22c1a1f!2sT%C3%ADa%20Milagro%20Bellavista!5e0!3m2!1ses!2sec!4v1702000000000!5m2!1ses!2sec"
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Actualizar reloj
+        function updateTime() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('es-EC', { hour12: false });
+            const date = now.toLocaleDateString('es-EC', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('currentTime').textContent = time;
+            document.getElementById('currentDate').textContent = date;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Terminal código
+        const terminalLines = [
+            { text: '╔════════════════════════════════════════════════════════╗', class: 'success' },
+            { text: '║     SISTEMA DE RASTREO INICIADO                       ║', class: 'success' },
+            { text: '╚════════════════════════════════════════════════════════╝', class: 'success' },
+            { text: '', class: '' },
+            { text: '> Conectando a red satelital GPS...', class: 'info' },
+            { text: '> Estableciendo túnel VPN seguro...', class: 'info' },
+            { text: '✓ Conexión establecida [Latencia: 23ms]', class: 'success' },
+            { text: '', class: '' },
+            { text: '━━━━━━━━━━━━━━━━ RASTREO GPS ACTIVO ━━━━━━━━━━━━━━━━', class: 'warning' },
+            { text: '> Número objetivo: 0983361280', class: 'info' },
+            { text: '> Operador: Claro Ecuador', class: 'info' },
+            { text: '⚠ Dispositivo INACTIVO - Última ubicación conocida', class: 'warning' },
+            { text: '> Señal GPS detectada: DÉBIL (última conexión)', class: 'warning' },
+            { text: '> Satélites conectados: 12/12', class: 'success' },
+            { text: '> Precisión calculada: ±5 metros', class: 'success' },
+            { text: '> Coordenadas: -2.135968, -79.603271', class: 'info' },
+            { text: '', class: '' },
+            { text: '━━━━━━━━━━━━━━ TRIANGULACIÓN CELULAR ━━━━━━━━━━━━━━━', class: 'warning' },
+            { text: '> Torre 1 [ECU-GYS-MIL-001] Señal: 89% ✓', class: 'success' },
+            { text: '> Torre 2 [ECU-GYS-MIL-002] Señal: 82% ✓', class: 'success' },
+            { text: '> Torre 3 [ECU-GYS-MIL-003] Señal: 76% ✓', class: 'success' },
+            { text: '✓ Triangulación completada exitosamente', class: 'success' },
+            { text: '', class: '' },
+            { text: '━━━━━━━━━━━━━━━ RASTREO FACEBOOK ━━━━━━━━━━━━━━━━━', class: 'warning' },
+            { text: '> Analizando tráfico de red...', class: 'info' },
+            { text: '> Sesión activa de Facebook detectada', class: 'success' },
+            { text: '> IP Address: 181.39.XXX.XXX', class: 'info' },
+            { text: '> ISP: Corporación Nacional de Telecomunicaciones', class: 'info' },
+            { text: '> Región: Guayas, Milagro, Ecuador', class: 'info' },
+            { text: '> Dispositivo: Android Mobile', class: 'info' },
+            { text: '> Última actividad: ' + new Date().toLocaleString('es-EC'), class: 'info' },
+            { text: '✓ Metadatos de ubicación extraídos', class: 'success' },
+            { text: '', class: '' },
+            { text: '╔════════════════════════════════════════════════════════╗', class: 'success' },
+            { text: '║       ÚLTIMA UBICACIÓN CONOCIDA - INACTIVO           ║', class: 'warning' },
+            { text: '╠════════════════════════════════════════════════════════╣', class: 'success' },
+            { text: '║  📱 Número: 0983361280                                ║', class: 'success' },
+            { text: '║  📍 Dirección: 410 Ave Rio Napo                       ║', class: 'success' },
+            { text: '║  🏙️  Ciudad: Milagro, Guayas, Ecuador                 ║', class: 'success' },
+            { text: '║  🌐 Coordenadas: -2.135968, -79.603271                ║', class: 'success' },
+            { text: '║  ⚠️  Estado: DISPOSITIVO INACTIVO                     ║', class: 'warning' },
+            { text: '╚════════════════════════════════════════════════════════╝', class: 'success' },
+            { text: '', class: '' },
+            { text: '>>> Sistema en modo de monitoreo continuo...', class: 'warning' },
+            { text: '>>> Presione Ctrl+C para detener el rastreo', class: 'info' }
+        ];
+
+        const terminal = document.getElementById('terminal');
+        let lineIndex = 0;
+
+        function addTerminalLine() {
+            if (lineIndex < terminalLines.length) {
+                const line = document.createElement('div');
+                line.className = `code-line ${terminalLines[lineIndex].class}`;
+                
+                const timestamp = new Date().toLocaleTimeString('es-EC', { hour12: false });
+                const lineText = terminalLines[lineIndex].text;
+                
+                if (lineText) {
+                    line.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${lineText}`;
+                } else {
+                    line.innerHTML = '&nbsp;';
+                }
+                
+                terminal.appendChild(line);
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                lineIndex++;
+                
+                const delay = lineText.startsWith('╔') || lineText.startsWith('╚') || lineText.startsWith('║') 
+                    ? 100 
+                    : Math.random() * 300 + 150;
+                
+                setTimeout(addTerminalLine, delay);
+            }
+        }
+
+        // Iniciar terminal después de un breve delay
+        setTimeout(addTerminalLine, 500);
+    </script>
+</body>
+</html>
